@@ -12,11 +12,29 @@ const saltRounds = 10;
 router.post("/auth/signup", async (req, res, next) => {
   try {
     // Get the data from req.body
-    const { email, password, name } = req.body;
+    const {
+      firstName,
+      lastName,
+      password,
+      email,
+      phoneNumber,
+      isStore,
+      postCode,
+      city,
+      address,
+      image,
+    } = req.body;
 
     // Validate that values are not empty strings
-    if (email === "" || password === "" || name === "") {
-      res.status(400).json({ message: "Provide email, password and name." });
+    if (
+      email === "" ||
+      password === "" ||
+      firstName === "" ||
+      lastName === ""
+    ) {
+      res
+        .status(400)
+        .json({ message: "Provide email, password and full name." });
       return;
     }
 
@@ -54,14 +72,22 @@ router.post("/auth/signup", async (req, res, next) => {
     const createdUser = await User.create({
       email,
       password: hashedPassword,
-      name,
+      firstName,
+      lastName,
+      phoneNumber,
+      isStore,
+      postCode,
+      city,
+      address,
+      image,
     });
 
     // We should never expose passwords publicly
     const user = {
       _id: createdUser._id,
       email: createdUser.email,
-      name: createdUser.name,
+      firstName: createdUser.firstName,
+      lastName: createdUser.lastName,
     };
 
     // Send the response back
@@ -99,9 +125,9 @@ router.post("/auth/login", async (req, res, next) => {
       const payload = {
         _id: foundUser._id,
         email: foundUser.email,
-        name: foundUser.name,
-        role: foundUser.role, // 'admin' or 'user'
-        image: foundUser.image, 
+        firstName: foundUser.firstName,
+        lastName: foundUser.lastName,
+        image: foundUser.image,
       };
 
       // Create a JWT with the payload
