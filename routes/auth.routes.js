@@ -88,6 +88,7 @@ router.post("/auth/signup", async (req, res, next) => {
       email: createdUser.email,
       firstName: createdUser.firstName,
       lastName: createdUser.lastName,
+      isStore: createdUser.isStore,
     };
 
     // Send the response back
@@ -128,6 +129,7 @@ router.post("/auth/login", async (req, res, next) => {
         firstName: foundUser.firstName,
         lastName: foundUser.lastName,
         image: foundUser.image,
+        isStore: foundUser.isStore,
       };
 
       // Create a JWT with the payload

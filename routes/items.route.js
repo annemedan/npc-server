@@ -89,6 +89,7 @@ router.post("/filter-products", async (req, res) => {
 router.post("/products/add", async (req, res) => {
   // /products or /products/add?
   const {
+    user,
     name,
     category,
     productImage,
@@ -104,7 +105,7 @@ router.post("/products/add", async (req, res) => {
 
   try {
     const response = await Item.create({
-      user: req.user,
+      user,
       name,
       category,
       productImage,
@@ -113,14 +114,15 @@ router.post("/products/add", async (req, res) => {
       description,
     });
 
-    await User.findByIdAndUpdate(req.user._id, {
+    await User.findByIdAndUpdate(user, {
       $push: {
-        storeItems: response,
+        productItems: response,
       },
     });
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ message: error.message });
+    console.log("error creating item:", error);
   }
 });
 

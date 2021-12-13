@@ -21,9 +21,9 @@ const userSchema = new Schema({
 
   cart: { type: Schema.Types.ObjectId, ref: "Cart" },
 
-  isStore: { type: Boolean, default: false }, // not sure if it should be here or should be role
+  isStore: { type: Boolean, default: false }, // better to use as boolean than as role
 
-  updated: Date,
+  updated: { type: Date },
   created: { type: Date, default: Date.now },
 });
 
