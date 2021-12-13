@@ -10,6 +10,7 @@ router.get("/api/users/profile", isAuthenticated, async (req, res, next) => {
     // req.payload holds the user info that was encoded in JWT during login.
 
     const currentUser = req.payload;
+
     const user = await User.findById(currentUser._id);
 
     res.status(200).json(user);
@@ -28,6 +29,8 @@ router.put("/api/users/profile", isAuthenticated, async (req, res, next) => {
     const {
       firstName,
       lastName,
+      storeName,
+      bio,
       phoneNumber,
       address,
       city,
@@ -41,6 +44,8 @@ router.put("/api/users/profile", isAuthenticated, async (req, res, next) => {
       {
         firstName,
         lastName,
+        storeName,
+        bio,
         phoneNumber,
         address,
         city,
@@ -56,5 +61,22 @@ router.put("/api/users/profile", isAuthenticated, async (req, res, next) => {
     next(error);
   }
 });
+
+// delete /api/users/current  - delete current user info
+//!! DELETE ROUTE IS NOT WORKING
+// router.post(
+//   "/api/users/profile/delete",
+//   isAuthenticated,
+//   async (req, res, next) => {
+//     try {
+//       const currentUser = req.payload;
+//       const user = await User.findByIdAndDelete(currentUser._id);
+
+//       res.status(200).json(user);
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
 
 module.exports = router;

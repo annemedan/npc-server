@@ -11,7 +11,7 @@ const storeSchema = new Schema({
 
   logo: { type: String },
 
-  products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Item" }],
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 const Store = model("Store", storeSchema);

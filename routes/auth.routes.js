@@ -23,6 +23,8 @@ router.post("/auth/signup", async (req, res, next) => {
       city,
       address,
       image,
+      storeName,
+      bio,
     } = req.body;
 
     // Validate that values are not empty strings
@@ -76,6 +78,8 @@ router.post("/auth/signup", async (req, res, next) => {
       lastName,
       phoneNumber,
       isStore,
+      storeName,
+      bio,
       postCode,
       city,
       address,
@@ -89,6 +93,8 @@ router.post("/auth/signup", async (req, res, next) => {
       firstName: createdUser.firstName,
       lastName: createdUser.lastName,
       isStore: createdUser.isStore,
+      bio: createdUser.bio,
+      storeName: createdUser.storeName,
     };
 
     // Send the response back
@@ -130,6 +136,8 @@ router.post("/auth/login", async (req, res, next) => {
         lastName: foundUser.lastName,
         image: foundUser.image,
         isStore: foundUser.isStore,
+        storeName: foundUser.storeName,
+        bio: foundUser.bio,
       };
 
       // Create a JWT with the payload
