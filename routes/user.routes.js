@@ -62,6 +62,19 @@ router.put("/api/users/profile", isAuthenticated, async (req, res, next) => {
   }
 });
 
+//get all users
+
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.find().populate("productItems");
+
+    // console.log("all users", users);
+    res.status(200).json(users);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
 // delete /api/users/current  - delete current user info
 //!! DELETE ROUTE IS NOT WORKING
 // router.post(
