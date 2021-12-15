@@ -150,7 +150,7 @@ router.get("/products/:id", async (req, res) => {
   }
 });
 
-router.put("/products/:id", async (req, res) => {
+router.put("/products/:id/edit", async (req, res) => {
   const {
     name,
     category,
