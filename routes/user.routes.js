@@ -75,6 +75,19 @@ router.get("/users", async (req, res) => {
   }
 });
 
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params;
+    //console.log("userId._id", userId.userId);
+    const user = await User.findById(userId.userId).populate("cart");
+    console.log("user in get/userid", user);
+    res.status(200).json(user);
+  } catch (e) {
+    console.log("error", e);
+    res.status(500).json({ message: e.message });
+  }
+});
+
 // delete /api/users/current  - delete current user info
 //!! DELETE ROUTE IS NOT WORKING
 // router.post(

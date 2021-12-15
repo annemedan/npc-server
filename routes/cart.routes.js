@@ -13,7 +13,7 @@ router.get("/cart", async (req, res) => {
   }
 });
 
-router.post("/cart", async (req, res) => {
+router.post("/cart/:id", async (req, res) => {
   try {
     const { itemId, quantity, purchasePrice, userId } = req.body;
     const user = await User.findById(userId);
@@ -28,6 +28,11 @@ router.post("/cart", async (req, res) => {
     let response;
     let updatedUser = {};
     if (user.cart) {
+      await Cart.findByIdAndUpdate(
+        user.cart._id,
+        { $push: { products: { item, quantity, purchasePrice } } },
+        { new: true } //<= responding with new (updated) object
+      );
     } else {
       response = await Cart.create({
         products: [
@@ -65,6 +70,7 @@ router.put("/cart/:id", async (req, res) => {
       res.status(400).json({ message: "missing fields" });
       return;
     }
+
     await Cart.findByIdAndUpdate(
       user.cart._id,
       { $push: { products: { item, quantity, purchasePrice } } },
