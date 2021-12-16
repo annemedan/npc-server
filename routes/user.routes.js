@@ -79,8 +79,19 @@ router.get("/user/:userId", async (req, res) => {
   try {
     const userId = req.params;
     //console.log("userId._id", userId.userId);
-    const user = await User.findById(userId.userId).populate("cart");
-    console.log("user in get/userid", user);
+    const user = await User.findById(userId.userId).populate({
+      path: "cart",
+      model: "Cart",
+      populate: {
+        path: "products",
+        model: "Item",
+        populate: {
+          path: "item",
+          model: "Item",
+        },
+      },
+    });
+    //console.log("user in get/userid", user);
     res.status(200).json(user);
   } catch (e) {
     console.log("error", e);

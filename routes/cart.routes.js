@@ -5,7 +5,7 @@ const User = require("../models/user.model");
 
 router.get("/cart", async (req, res) => {
   try {
-    console.log("request", req.session.currentUser);
+    console.log("request", req.payload);
     const cart = await Cart.find();
     res.status(200).json(cart);
   } catch (e) {
