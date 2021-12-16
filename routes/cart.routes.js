@@ -84,4 +84,104 @@ router.put("/cart/:id", async (req, res) => {
   }
 });
 
+//this new routes are now working
+
+router.put("/cart/:id/increase", async (req, res) => {
+  try {
+    const { itemId, quantity, purchasePrice, userId } = req.body;
+    const user = await User.findById(userId).populate("cart");
+
+    const item = await Item.findById(itemId);
+
+    if (!itemId) {
+      res.status(400).json({ message: "missing fields" });
+      return;
+    }
+
+    const cart = await Cart.findById(user.cart._id).populate("products.item");
+    const product = cart.products.find(
+      (product) => product.item.name === item.name
+    );
+    product.quantity++;
+
+    const newCart = await Cart.findByIdAndUpdate(
+      user.cart._id,
+      {
+        products: cart.products,
+      },
+      { new: true }
+    ).populate("products.item");
+
+    res.status(200).json(newCart);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+router.put("/cart/:id/decrease", async (req, res) => {
+  try {
+    const { itemId, quantity, purchasePrice, userId } = req.body;
+    const user = await User.findById(userId).populate("cart");
+
+    const item = await Item.findById(itemId);
+
+    if (!itemId) {
+      res.status(400).json({ message: "missing fields" });
+      return;
+    }
+
+    const cart = await Cart.findById(user.cart._id).populate("products.item");
+
+    const product = cart.products.find(
+      (product) => product.item.name === item.name
+    );
+    product.quantity--;
+
+    const newCart = await Cart.findByIdAndUpdate(
+      user.cart._id,
+      {
+        products: cart.products,
+      },
+      { new: true }
+    ).populate("products.item");
+
+    res.status(200).json(newCart);
+  } catch (e) {
+    console.log("error", e);
+    res.status(500).json({ message: e.message });
+  }
+});
+
+router.put("/cart/:id/remove", async (req, res) => {
+  try {
+    const { itemId, quantity, purchasePrice, userId } = req.body;
+    const user = await User.findById(userId).populate("cart");
+
+    const item = await Item.findById(itemId);
+    if (!itemId) {
+      res.status(400).json({ message: "Missing fields" });
+      return;
+    }
+
+    const cart = await Cart.findById(user.cart._id).populate("products.item");
+
+    const products = cart.products.filter(
+      (product) => product.item.name !== item.name
+    );
+
+    const newCart = await Cart.findByIdAndUpdate(
+      user.cart._id,
+      {
+        products: products,
+      },
+      { new: true }
+    ).populate("products.item");
+
+    res.status(200).json(newCart);
+  } catch (e) {
+    console.log("error", e);
+    res.status(500).json({ message: e.message });
+  }
+});
+
 module.exports = router;
