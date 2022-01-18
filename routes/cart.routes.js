@@ -18,8 +18,8 @@ router.post("/cart/:id", async (req, res) => {
     const { itemId, quantity, purchasePrice, userId } = req.body;
     const user = await User.findById(userId);
     const item = await Item.findById(itemId);
-    console.log("user", user);
-    console.log("item", item);
+    //console.log("user", user);
+    //console.log("item", item);
     if (!itemId) {
       res.status(400).message({ message: "missing fields" });
       return;
@@ -64,8 +64,8 @@ router.put("/cart/:id", async (req, res) => {
     const { itemId, quantity, purchasePrice, userId } = req.body;
     const user = await User.findById(userId);
     const item = await Item.findById(itemId);
-    console.log("user with cart", user);
-    console.log("item", item);
+    //console.log("user with cart", user);
+    //console.log("item", item);
     if (!itemId) {
       res.status(400).json({ message: "missing fields" });
       return;

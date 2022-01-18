@@ -43,47 +43,6 @@ router.get("/products", async (req, res) => {
   }
 });
 
-router.post("/filter-products", async (req, res) => {
-  let order = req.body.order ? req.body.order : "name";
-  let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
-
-  const findArgument = {};
-
-  // console.log(order, sortBy, limit, skip, req.body.filters);
-  console.log("findArgs", findArgument);
-
-  for (let key in req.body.filters) {
-    if (req.body.filters[key].length > 0) {
-      if (key === "category") {
-        // gte -  greater than price [0-10]
-        // lte - less than
-        findArgs[key] = {
-          $gte: req.body.filters[key][0],
-          $lte: req.body.filters[key][1],
-        };
-      } else {
-        findArgs[key] = req.body.filters[key];
-      }
-    }
-  }
-
-  Item.find(findArgs)
-
-    .sort([[sortBy, order]])
-
-    .exec((err, data) => {
-      if (err) {
-        return res.status(400).json({
-          error: "Products not found",
-        });
-      }
-      res.json({
-        size: data.length,
-        data,
-      });
-    });
-});
-
 // add products
 
 router.post("/products/add", async (req, res) => {
@@ -180,6 +139,25 @@ router.put("/products/:id/edit", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+});
+
+//trying to fix the search
+
+router.get("/products/search", async (req, res) => {
+  let query = req.query.q;
+  console.log("query >>---", query);
+
+  let searchResults;
+  if (query) {
+    let regex = new RegExp(query, "i", "g");
+    searchResults = await Item.find({
+      $or: [{ name: regex }, { category: regex }, { description: regex }],
+    });
+  } else {
+    searchResults = [];
+  }
+  //console.log( "searchResults", searchResults );
+  res.status(200).json(items);
 });
 
 module.exports = router;
